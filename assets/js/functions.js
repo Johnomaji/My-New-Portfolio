@@ -206,6 +206,12 @@ $( document ).ready(function() {
     });
   }
   
+    outerNav();
+    workSlider();
+    transitionLabels();
+  
+  });
+  
   document.addEventListener('DOMContentLoaded', function () {
     outerNav();
     workSlider();
