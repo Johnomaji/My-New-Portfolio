@@ -1,431 +1,1490 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>OMAJI JOHN</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Web Developer | Software Engineer">
-  <meta name="keywords" content="web development, software engineering, coding, HTML, CSS, SASS, JavaScript, jQuery, front-end development, back-end development, full-stack development">
-  <meta name="author" content="John Omaji">
-  <link rel="stylesheet" href="assets/css/main.css">
+  <meta name="description" content="Omaji John — Software Developer based in Abuja, Nigeria. Building modern web apps, Web3 protocols, and digital experiences.">
+  <meta name="keywords" content="web developer, software engineer, frontend, React, Web3, Abuja, Nigeria, portfolio">
+  <meta name="author" content="Omaji John">
+  <meta property="og:title" content="Omaji John — Software Developer">
+  <meta property="og:description" content="Building modern web apps, Web3 protocols, and digital experiences.">
+  <title>Omaji John — Software Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:       #06060c;
+      --bg-2:     #0b0b14;
+      --bg-card:  #0f0f1a;
+      --accent-1: #5b4fff;
+      --accent-2: #00e5ff;
+      --text:     #f0f0fa;
+      --text-muted: #8888aa;
+      --border:   rgba(255,255,255,0.07);
+      --nav-h:    72px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { cursor: none; font-family: inherit; }
+
+    /* ===== CUSTOM CURSOR ===== */
+    #cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent-2);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: background 0.2s;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent-1);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+      transition: width 0.3s, height 0.3s, border-color 0.3s;
+    }
+    body:has(a:hover) #cursor-ring,
+    body:has(button:hover) #cursor-ring { width: 52px; height: 52px; border-color: var(--accent-2); }
+
+    /* ===== GRID BACKGROUND ===== */
+    #grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    /* ===== NOISE OVERLAY ===== */
+    #noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 0 5%;
+      gap: 2rem;
+      background: rgba(6,6,12,0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.01em;
+      flex-shrink: 0;
+    }
+    .nav-logo-pill {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      display: grid;
+      place-items: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+      margin-left: auto;
+    }
+    .nav-links a {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      transition: color 0.2s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent-2);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-shrink: 0;
+    }
+    .nav-avail {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: #4ade80;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .avail-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #4ade80;
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0.5); }
+      50%       { box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+    }
+    .btn-hire {
+      padding: 0.5rem 1.25rem;
+      border-radius: 100px;
+      background: var(--accent-1);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-hire:hover { background: #7060ff; transform: translateY(-1px); }
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      padding: 4px;
+      margin-left: auto;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ===== FADE UP ANIMATION ===== */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== HERO ===== */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: calc(var(--nav-h) + 4rem) 5% 6rem;
+      overflow: hidden;
+      z-index: 2;
+    }
+    .hero-inner {
+      display: flex;
+      align-items: center;
+      gap: 30rem;
+      width: 100%;
+    }
+    .hero-glow-1 {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(91,79,255,0.18) 0%, transparent 70%);
+      top: -100px; left: -100px;
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.12) 0%, transparent 70%);
+      bottom: -50px; right: -50px;
+      pointer-events: none;
+    }
+    .hero-content { position: relative; flex: 1; min-width: 0; max-width: 640px; }
+    .hero-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--accent-2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-label::before {
+      content: '';
+      display: inline-block;
+      width: 24px; height: 1px;
+      background: var(--accent-2);
+    }
+    .hero-name {
+      font-size: clamp(3.5rem, 9vw, 7.5rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 1.25rem;
+    }
+    .grad-text {
+      background: linear-gradient(120deg, var(--accent-1) 0%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--text-muted);
+      max-width: 560px;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 2.5rem;
+    }
+    .tag {
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.03);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .tag:hover { border-color: var(--accent-1); color: var(--text); }
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 4rem;
+    }
+    .btn-primary {
+      padding: 0.85rem 2rem;
+      border-radius: 100px;
+      background: linear-gradient(135deg, var(--accent-1), #7b6dff);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(91,79,255,0.4); }
+    .btn-outline {
+      padding: 0.85rem 2rem;
+      border-radius: 100px;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-outline:hover { border-color: var(--accent-2); background: rgba(0,229,255,0.05); transform: translateY(-2px); }
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .stat-num {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 0.2rem;
+    }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 5%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: bounce-down 2s ease-in-out infinite;
+    }
+    .scroll-indicator svg { opacity: 0.5; }
+    @keyframes bounce-down {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(6px); }
+    }
+
+    /* ===== SECTION SHARED ===== */
+    section { position: relative; z-index: 2; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--accent-2);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 20px; height: 1px;
+      background: var(--accent-2);
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    /* ===== WORKS ===== */
+    #works {
+      background: var(--bg-2);
+      padding: 6rem 5%;
+    }
+    .works-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .work-card {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--bg-card);
+      cursor: none;
+    }
+    .work-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .work-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(6,6,12,0.97) 0%, rgba(6,6,12,0.4) 60%, transparent 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+      transform: translateY(60%);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .work-card:hover .work-overlay { transform: translateY(0); }
+    .work-card:hover img { transform: scale(1.06); }
+    .work-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--accent-2);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .work-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .work-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 0.9rem;
+    }
+    .work-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--accent-2);
+      font-family: 'JetBrains Mono', monospace;
+      transition: gap 0.2s;
+    }
+    .work-link:hover { gap: 0.7rem; }
+
+    /* ===== ABOUT ===== */
+    #about {
+      padding: 7rem 5%;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      margin-top: 3.5rem;
+    }
+    .about-bio p {
+      color: var(--text-muted);
+      line-height: 1.8;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .about-bio p strong { color: var(--text); font-weight: 600; }
+    .about-bio .grad-text { font-size: 1.5rem; font-weight: 700; line-height: 1.2; margin: 1.5rem 0; }
+    .about-location {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+    }
+    .about-location svg { color: var(--accent-1); flex-shrink: 0; }
+    .skills-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .skill-tag {
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      background: rgba(91,79,255,0.1);
+      border: 1px solid rgba(91,79,255,0.2);
+      font-size: 0.78rem;
+      color: var(--accent-1);
+      font-family: 'JetBrains Mono', monospace;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .skill-tag:hover { background: rgba(91,79,255,0.2); border-color: var(--accent-1); }
+    .services-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .service-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .service-item:hover { border-color: rgba(91,79,255,0.3); background: rgba(91,79,255,0.04); }
+    .service-icon { font-size: 1.2rem; flex-shrink: 0; line-height: 1; }
+    .service-text strong { display: block; font-size: 0.9rem; margin-bottom: 0.15rem; }
+    .service-text span { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* ===== CONTACT ===== */
+    #contact {
+      background: var(--bg-2);
+      padding: 7rem 5%;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      margin-top: 3.5rem;
+    }
+    .contact-info-line {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .contact-info-line svg { color: var(--accent-1); flex-shrink: 0; }
+    .contact-info-line a { color: var(--text-muted); transition: color 0.2s; }
+    .contact-info-line a:hover { color: var(--accent-2); }
+    .contact-socials {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+    .social-btn {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      display: grid;
+      place-items: center;
+      color: var(--text-muted);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .social-btn:hover { border-color: var(--accent-2); color: var(--accent-2); background: rgba(0,229,255,0.06); }
+    .contact-form-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--accent-1); background: rgba(91,79,255,0.04); }
+    .form-group textarea { min-height: 120px; resize: vertical; }
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent-1), #7b6dff);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.6; }
+
+    /* ===== HIRE ME ===== */
+    #hire {
+      padding: 7rem 5%;
+      text-align: center;
+    }
+    .hire-inner {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .hire-sub {
+      color: var(--text-muted);
+      margin: 0.75rem auto 3rem;
+      max-width: 500px;
+    }
+    .hire-services {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+    }
+    .service-check {
+      position: relative;
+    }
+    .service-check input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      width: 0; height: 0;
+    }
+    .service-check label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.25rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      cursor: none;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+      font-size: 0.85rem;
+    }
+    .service-check label .svc-icon { font-size: 1.5rem; }
+    .service-check input:checked + label {
+      border-color: var(--accent-1);
+      background: rgba(91,79,255,0.1);
+      color: var(--text);
+    }
+    .service-check label:hover { border-color: rgba(91,79,255,0.4); transform: translateY(-2px); }
+    .hire-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+    .hire-form .btn-submit { max-width: 320px; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      position: relative;
+      z-index: 2;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 1.75rem 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    footer a { color: var(--text-muted); transition: color 0.2s; }
+    footer a:hover { color: var(--accent-2); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .hire-services { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .nav-links, .nav-avail { display: none; }
+      .nav-links.mobile-open {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: var(--nav-h);
+        left: 0; right: 0;
+        background: rgba(6,6,12,0.97);
+        backdrop-filter: blur(20px);
+        padding: 2rem 5%;
+        border-bottom: 1px solid var(--border);
+        gap: 1.5rem;
+        z-index: 99;
+      }
+      .nav-hamburger { display: flex; }
+      .btn-hire { display: none; }
+      .works-grid { grid-template-columns: 1fr; }
+      .work-overlay { transform: translateY(0); }
+      .work-card img { transform: scale(1.06); }
+      .hire-services { grid-template-columns: 1fr 1fr; }
+      .hire-fields { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.75rem; }
+      #cursor-dot, #cursor-ring { display: none; }
+      body { cursor: auto; }
+      button { cursor: pointer; }
+    }
+
+    /* ===== TECH GLOBE ===== */
+    .hero-globe-wrap {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+    #tech-globe {
+      position: relative;
+      width: 420px;
+      height: 420px;
+    }
+    .globe-core {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 38%,
+        rgba(91,79,255,0.12) 0%,
+        rgba(0,229,255,0.06) 45%,
+        transparent 70%);
+      pointer-events: none;
+    }
+    .globe-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      border-radius: 50%;
+      border: 1px solid rgba(91,79,255,0.13);
+      pointer-events: none;
+      transform-style: preserve-3d;
+    }
+    .globe-ring-1 {
+      width: 390px; height: 390px;
+      margin: -195px 0 0 -195px;
+      border-color: rgba(91,79,255,0.1);
+      transform: rotateX(72deg);
+    }
+    .globe-ring-2 {
+      width: 330px; height: 330px;
+      margin: -165px 0 0 -165px;
+      border-color: rgba(0,229,255,0.08);
+      transform: rotateX(72deg) rotateZ(60deg);
+    }
+    .globe-ring-3 {
+      width: 260px; height: 260px;
+      margin: -130px 0 0 -130px;
+      border-color: rgba(91,79,255,0.07);
+      transform: rotateX(72deg) rotateZ(120deg);
+    }
+    .globe-node {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transform: translate(-50%, -50%);
+      will-change: transform, opacity;
+      pointer-events: none;
+    }
+    .globe-node img {
+      width: 28px; height: 28px;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 0 5px rgba(255,255,255,0.12));
+    }
+    .globe-node span {
+      font-size: 0.54rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(136,136,170,0.8);
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+    @media (max-width: 1100px) {
+      .hero-globe-wrap { display: none; }
+      .hero-content { max-width: none; }
+    }
+
+    /* ===== FORM SUCCESS STATE ===== */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+      color: #4ade80;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
 
-<!-- notification for small viewports and landscape oriented smartphones -->
-<div class="device-notification">
-  <a class="device-notification--logo" href="#0">
-    <img src="assets/img/logo.png" alt="Global">
-    <p>OMAJI JOHN</p>
+<!-- Custom cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Background layers -->
+<div id="grid-bg" aria-hidden="true"></div>
+<div id="noise" aria-hidden="true"></div>
+
+<!-- ===== NAV ===== -->
+<nav id="main-nav" role="navigation" aria-label="Main navigation">
+  <a href="#hero" class="nav-logo">
+    <div class="nav-logo-pill" aria-hidden="true">OJ</div>
+    <span>Omaji John</span>
   </a>
-  <p class="device-notification--message">OMAJI JOHN has so much to offer that we must request you orient your device to portrait or find a larger screen. You won't be disappointed.</p>
-</div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#works">Works</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-avail" aria-label="Available for work">
+      <span class="avail-dot"></span>
+      Available
+    </div>
+    <a href="#hire" class="btn-hire">Hire Me</a>
+  </div>
+  <button class="nav-hamburger" id="hamburger" aria-label="Toggle navigation" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-<div class="perspective effect-rotate-left">
-  <div class="container"><div class="outer-nav--return"></div>
-    <div id="viewport" class="l-viewport">
-      <div class="l-wrapper">
-        <header class="header">
-          <a class="header--logo" href="#0">
-            <img src="assets/img/logo.png" alt="Global">
-            <p>Omaji JOHN</p>
-          </a>
-          <button class="header--cta cta">Hire Me</button>
-          <div class="header--nav-toggle">
-            <span></span>
-          </div>
-        </header>
-        <nav class="l-side-nav">
-          <ul class="side-nav">
-            <li class="is-active"><span>Home</span></li>
-            <li><span>Works</span></li>
-            <li><span>About</span></li>
-            <li><span>Contact</span></li>
-            <li><span>Hire Me</span></li>
-          </ul>
-        </nav>
-        <ul class="l-main-content main-content">
-          <li class="l-section section section--is-active">
-            <div class="intro">
-              <div class="intro--banner">
-                <br>
-                <h1>OMAJI <br> JOHN</h1>
-                <h3>Software developer</h3>
-                <button class="cta">Hire Me
-                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                  <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                    <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"/>
-                  </g>
-                  </svg>
-                  <span class="btn-background"></span>
-                </button>
-                <img src="assets/img/introduction-visual.png" alt="Welcome">
-              </div>
-              <div class="intro--options">
-                <a href="#0">
-                  <h3>Development</h3>
-                  <p>I create tailored web applications designed specifically to meet unique requirements.</p>
-                </a>
-                <a href="#0">
-                  <h3>Maintenance &amp; Support</h3>
-                  <p>I provide regular updates, bug fixes, security patches, and technical support.</p>
-                </a>
-                <a href="#0">
-                  <h3>Search Engine Optimization</h3>
-                  <p>i help clients improve their website visibility in search engines, by implementing best practices</p>
-                </a>
-              </div>
-            </div>
-          </li>
-          <li class="l-section section">
-            <div class="work">
-              <h2>Portfolio</h2>
-              <div class="work--lockup">
-                <ul class="slider">
-                  <!-- <li class="slider--item slider--item-left">
-                    <a href="https://www.usiasdhr.com" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/usiasdhr.jpg" alt="USIASDHR">
-                      </div>
-                      <p class="slider--item-title">USIASDHR</p>
-                      <p class="slider--item-description">Online Academy for an Autism Foundation.</p>
-                    </a>
-                  </li> -->
-
-
-                    <li class="slider--item slider--item-center">
-                    <a href="https://surflending.org/app" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/surf.png" alt="SURF CARDANO">
-                      </div>
-                      <p class="slider--item-title">SURF CARDANO</p>
-                      <p class="slider--item-description">Cardano lending Protocol. (Web3)</p>
-                    </a>
-                  </li>
-
-
-                  <li class="slider--item ">
-                    <a href="https://pulsecardano.org/app" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/pulse.png" alt="PULSE CARDANO">
-                      </div>
-                      <p class="slider--item-title">PULSE CARDANO</p>
-                      <p class="slider--item-description">Cardano Yield Trading Platform. (Web3)</p>
-                    </a>
-                  </li>
-
-                 <li class="slider--item ">
-                    <a href="https://www.obafemithanni.com" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/obafemi.jpg" alt="OBAFEMI">
-                      </div>
-                      <p class="slider--item-title">OBAFEMI THANNI</p>
-                      <p class="slider--item-description">Portfolio website for a client.</p>
-                    </a>
-                  </li>
-                  <!-- <li class="slider--item slider--item-right">
-                    <a href="https://www.Genz.com.ng" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/genz.jpg" alt="GenZ">
-                      </div>
-                      <p class="slider--item-title">GEN Z</p>
-                      <p class="slider--item-description">Blog (Tech, Education, Lifestyle)</p>
-                    </a>
-                  </li> -->
-
-                  <!-- <li class="slider--item ">
-                    <a href="https://www.Bluetifulvoyage.com.ng" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/bluetiful.jpg " alt="bluetiful">
-                      </div>
-                      <p class="slider--item-title">BLUETIFUL VOYAGE</p>
-                      <p class="slider--item-description">travel Agency</p>
-                    </a>
-                  </li> -->
-
-                  <li class="slider--item ">
-                    <a href="https://www.mibs.com.ng" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/macory.jpg" alt="MACORY">
-                      </div>
-                      <p class="slider--item-title">MACORY</p>
-                      <p class="slider--item-description">Organizational Website</p>
-                    </a>
-                  </li>
-
-                  <li class="slider--item ">
-                    <a href="https://www.riabymariafoundation.com" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/rbm.jpg" alt="RBM">
-                      </div>
-                      <p class="slider--item-title">RBM</p>
-                      <p class="slider--item-description">Non Governmental Organization Website</p>
-                    </a>
-                  </li>
-
-                  <li class="slider--item ">
-                    <a href="https://www.voltrootz.bio/" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/voltrootz.png" alt="Voltrootz">
-                      </div>
-                      <p class="slider--item-title">Voltrootz</p>
-                      <p class="slider--item-description">Mordern Farm Technology Website</p>
-                    </a>
-                  </li>
-
-                  <li class="slider--item ">
-                    <a href="https://www.maurlink.org" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/maurlink.png" alt="Maurlink">
-                      </div>
-                      <p class="slider--item-title">Maurlink</p>
-                      <p class="slider--item-description">Medical Website</p>
-                    </a>
-                  </li>
-
-                  <li class="slider--item ">
-                    <a href="https://fencify.tech/" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/fencify.png" alt="Fencify">
-                      </div>
-                      <p class="slider--item-title">Fencify</p>
-                      <p class="slider--item-description">Agricultural Tech Solution</p>
-                    </a>
-                  </li>
-
-                  <li class="slider--item ">
-                    <a href="https://www.aaharun.com" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/aaharun.png" alt="aaharun">
-                      </div>
-                      <p class="slider--item-title">aaharun</p>
-                      <p class="slider--item-description">Travel Website</p>
-                    </a>
-                  </li>
-
-
-                  <li class="slider--item ">
-                    <a href="https://www.chinezeononye.com" target="_blank" rel="noopener">
-                      <div class="slider--item-image">
-                        <img src="assets/img/chineze.png" alt="chinezeononye">
-                      </div>
-                      <p class="slider--item-title">chinezeononye</p>
-                      <p class="slider--item-description">Personal Website</p>
-                    </a>
-                  </li>
-
-                </ul>
-                <div class="slider--prev">
-                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                  viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                  <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                    <path d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
-                    c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
-                    c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z"/>
-                  </g>
-                  </svg>
-                </div>
-                <div class="slider--next">
-                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                  <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                    <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"/>
-                  </g>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="l-section section">
-            <div class="about">
-              <div class="about--banner">
-                <h2>I<br>believe in<br>Creating<br>Solutions</h2>
-                <a href="#0">Career
-                  <span>
-                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                    <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                      <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z"/>
-                    </g>
-                    </svg>
-                  </span>
-                </a>
-                <img src="assets/img/about-visual.png" alt="About Us">
-              </div>
-              <div class="about--options">
-                <a href="#0">
-                  <h3>Winners</h3>
-                </a>
-                <a href="#0">
-                  <h3>Philosophy</h3>
-                </a>
-                <a href="#0">
-                  <h3>History</h3>
-                </a>
-              </div>
-            </div>
-          </li>
-          <li class="l-section section">
-            <div class="contact">
-              <div class="contact--lockup">
-                <div class="modal">
-                  <div class="modal--information">
-                    <p>Abuja, Nigeria</p>
-                    <a href="mailto:johnomaji9@gmail.com">johnomaji9@gmail.com</a>
-                    <a href="tel:+2349028139361">+234 902 813 9361</a>
-                  </div>
-                  <ul class="modal--options">
-                    <li><a href="https://www.linkedin.com/in/omaji-john-b63885210/">Linkedin</a></li>
-                    <li><a href="https://twitter.com/WebJOHNNY_">X/Twitter</a></li>
-                    <li><a href="mailto:johnomaji9@gmail.com">Email</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="l-section section">
-            <div class="hire">
-              <h2>What Services do you want?</h2>
-              <!-- checkout formspree.io for easy form setup -->
-              <!-- <form id="my-form" class="work-request" action="https://formspree.io/f/xbldyall"
-              method="POST" accept="application/json">
-                <div class="work-request--options">
-                  <span class="options-a">
-                    <input id="opt-1" type="checkbox" name="services1" value="app design">
-                    <label for="opt-1">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      Mobile App
-                    </label>
-                    <input id="opt-2" type="checkbox" name="services2" value="graphic design">
-                    <label for="opt-2">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      Graphic Design
-                    </label>
-                    <input id="opt-3" type="checkbox" name="services3" value="motion design">
-                    <label for="opt-3">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      Maintenance & Support
-                    </label>
-                  </span>
-                  <span class="options-b">
-                    <input id="opt-4" type="checkbox" name="services4" value="ux design">
-                    <label for="opt-4">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      UI/UX Design
-                    </label>
-                    <input id="opt-5" type="checkbox" name="services5" value="webdesign">
-                    <label for="opt-5">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      Web Design
-                    </label>
-                    <input id="opt-6" type="checkbox" name="services6" value="marketing">
-                    <label for="opt-6">
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      viewBox="0 0 150 111" style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                      <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                        <path d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z"/>
-                      </g>
-                      </svg>
-                      AI Chatbot
-                    </label>
-                  </span>
-                </div>
-                <div class="work-request--information">
-                  <div class="information-name">
-                    <input id="name" type="text" spellcheck="false">
-                    <label for="name">Name</label>
-                  </div>
-                  <div class="information-email">
-                    <input id="email" type="email" spellcheck="false">
-                    <label for="email">Email</label>
-                  </div>
-                </div>
-                <input type="submit" value="Send Request">
-              </form> -->
-              <form id="my-form" class="work-request" action="https://formspree.io/f/xbldyall"
-              method="POST" accept="application/json">
-              
-            <div class="work-request--options">
-                <span class="options-a">
-                    <input id="opt-1" type="checkbox" name="services[]" value="app design">
-                    <label for="opt-1">Mobile App</label>
-        
-                    <input id="opt-2" type="checkbox" name="services[]" value="graphic design">
-                    <label for="opt-2">Graphic Design</label>
-        
-                    <input id="opt-3" type="checkbox" name="services[]" value="motion design">
-                    <label for="opt-3">Maintenance & Support</label>
-                </span>
-        
-                <span class="options-b">
-                    <input id="opt-4" type="checkbox" name="services[]" value="ux design">
-                    <label for="opt-4">UI/UX Design</label>
-        
-                    <input id="opt-5" type="checkbox" name="services[]" value="web design">
-                    <label for="opt-5">Web Design</label>
-        
-                    <input id="opt-6" type="checkbox" name="services[]" value="marketing">
-                    <label for="opt-6">AI Chatbot</label>
-                </span>
-            </div>
-        
-            <div class="work-request--information">
-                <div class="information-name">
-                    <input id="name" type="text" name="name" spellcheck="false" required>
-                    <label for="name">Name</label>
-                </div>
-        
-                <div class="information-email">
-                    <input id="email" type="email" name="email" spellcheck="false" required>
-                    <label for="email">Email</label>
-                </div>
-            </div>
-        
-            <input type="submit" value="Send Request">
-        </form>
-        
-            </div>
-          </li>
-        </ul>
+<!-- ===== HERO ===== -->
+<section id="hero" aria-label="Introduction">
+  <div class="hero-glow-1" aria-hidden="true"></div>
+  <div class="hero-glow-2" aria-hidden="true"></div>
+  <div class="hero-inner">
+  <div class="hero-content">
+    <p class="hero-label fade-up">Software Developer</p>
+    <h1 class="hero-name fade-up" style="transition-delay:0.1s">
+      Omaji<br><span class="grad-text">John</span>
+    </h1>
+    <p class="hero-sub fade-up" style="transition-delay:0.2s">
+      I build fast, modern web experiences — from SaaS products to
+      Web3 protocols — with a focus on clean interfaces and real-world impact.
+    </p>
+    <div class="hero-tags fade-up" style="transition-delay:0.3s">
+      <span class="tag">React</span>
+      <span class="tag">Next.js</span>
+      <span class="tag">TypeScript</span>
+      <span class="tag">Web3</span>
+      <span class="tag">Node.js</span>
+      <span class="tag">UI/UX</span>
+    </div>
+    <div class="hero-ctas fade-up" style="transition-delay:0.4s">
+      <a href="#works" class="btn-primary">
+        View My Work
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+    <div class="hero-stats fade-up" style="transition-delay:0.5s">
+      <div>
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Projects Shipped</div>
+      </div>
+      <div>
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div>
+        <div class="stat-num">2</div>
+        <div class="stat-label">Web3 Protocols</div>
       </div>
     </div>
   </div>
-  <ul class="outer-nav">
-    <li class="is-active">Home</li>
-    <li>Works</li>
-    <li>About</li>
-    <li>Contact</li>
-    <li>Hire Me</li>
-  </ul>
-</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
-<script src="assets/js/functions-min.js"></script>
+  <!-- Tech Globe -->
+  <div class="hero-globe-wrap" aria-hidden="true">
+    <div id="tech-globe">
+      <div class="globe-core"></div>
+      <div class="globe-ring globe-ring-1"></div>
+      <div class="globe-ring globe-ring-2"></div>
+      <div class="globe-ring globe-ring-3"></div>
+    </div>
+  </div>
 
+  </div><!-- /.hero-inner -->
+  <div class="scroll-indicator" aria-hidden="true">
+    <span>Scroll</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<!-- ===== WORKS ===== -->
+<section id="works" aria-label="Portfolio works">
+  <div class="works-header">
+    <div>
+      <p class="section-label fade-up">Selected Work</p>
+      <h2 class="section-title fade-up">What I've Built</h2>
+    </div>
+    <a href="#contact" class="btn-outline fade-up" style="font-size:0.85rem;padding:0.65rem 1.5rem">Start a Project →</a>
+  </div>
+  <div class="works-grid">
+
+    <!-- Surf -->
+    <div class="work-card fade-up">
+      <img src="assets/img/surf.png" alt="Surf Cardano — Cardano Lending Protocol" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">Web3 · DeFi · Cardano</p>
+        <h3 class="work-title">Surf Cardano</h3>
+        <p class="work-desc">Cardano lending protocol enabling decentralized borrowing and lending on-chain.</p>
+        <a href="https://surflending.org/app" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Pulse -->
+    <div class="work-card fade-up" style="transition-delay:0.05s">
+      <img src="assets/img/pulse.png" alt="Pulse Cardano — Yield Trading Platform" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">Web3 · DeFi · Cardano</p>
+        <h3 class="work-title">Pulse Cardano</h3>
+        <p class="work-desc">Cardano yield trading platform for maximizing returns on digital assets.</p>
+        <a href="https://pulsecardano.org/app" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Obafemi -->
+    <div class="work-card fade-up" style="transition-delay:0.1s">
+      <img src="assets/img/obafemi.jpg" alt="Obafemi Thanni — Portfolio Website" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">Portfolio · React</p>
+        <h3 class="work-title">Obafemi Thanni</h3>
+        <p class="work-desc">Bespoke portfolio website crafted for a creative professional client.</p>
+        <a href="https://www.obafemithanni.com" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Fencify -->
+    <div class="work-card fade-up" style="transition-delay:0.15s">
+      <img src="assets/img/fencify.png" alt="Fencify — Agricultural Tech Solution" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">AgriTech · SaaS</p>
+        <h3 class="work-title">Fencify</h3>
+        <p class="work-desc">Agricultural tech solution simplifying farm boundary management and analytics.</p>
+        <a href="https://fencify.tech/" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Voltrootz -->
+    <div class="work-card fade-up" style="transition-delay:0.2s">
+      <img src="assets/img/voltrootz.png" alt="Voltrootz — Modern Farm Technology" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">AgriTech · Web</p>
+        <h3 class="work-title">Voltrootz</h3>
+        <p class="work-desc">Modern farm technology website connecting growers to smart agricultural tools.</p>
+        <a href="https://www.voltrootz.bio/" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Maurlink -->
+    <div class="work-card fade-up" style="transition-delay:0.25s">
+      <img src="assets/img/maurlink.png" alt="Maurlink — Medical Website" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">Health · Web</p>
+        <h3 class="work-title">Maurlink</h3>
+        <p class="work-desc">Medical platform connecting healthcare professionals and patients online.</p>
+        <a href="https://www.maurlink.org" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Aaharun -->
+    <div class="work-card fade-up" style="transition-delay:0.3s">
+      <img src="assets/img/aaharun.png" alt="Aaharun — Travel Website" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">Travel · Web</p>
+        <h3 class="work-title">Aaharun</h3>
+        <p class="work-desc">Immersive travel website showcasing curated destinations and experiences.</p>
+        <a href="https://www.aaharun.com" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Macory -->
+    <div class="work-card fade-up" style="transition-delay:0.35s">
+      <img src="assets/img/macory.jpg" alt="Macory — Organizational Website" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">Corporate · Web</p>
+        <h3 class="work-title">Macory (MIBS)</h3>
+        <p class="work-desc">Professional organizational website built for a growing corporate entity.</p>
+        <a href="https://www.mibs.com.ng" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- RBM -->
+    <div class="work-card fade-up" style="transition-delay:0.4s">
+      <img src="assets/img/rbm.jpg" alt="RBM — NGO Website" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">NGO · Web</p>
+        <h3 class="work-title">RBM Foundation</h3>
+        <p class="work-desc">Non-governmental organization website amplifying impact and donor reach.</p>
+        <a href="https://www.riabymariafoundation.com" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Chineze -->
+    <div class="work-card fade-up" style="transition-delay:0.45s">
+      <img src="assets/img/chineze.png" alt="Chineze Ononye — Personal Website" loading="lazy">
+      <div class="work-overlay">
+        <p class="work-tag">Portfolio · Web</p>
+        <h3 class="work-title">Chineze Ononye</h3>
+        <p class="work-desc">Personal website for a client — clean, minimal, and professional.</p>
+        <a href="https://www.chinezeononye.com" target="_blank" rel="noopener noreferrer" class="work-link">
+          Visit Site
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" aria-label="About me">
+  <p class="section-label fade-up">About Me</p>
+  <h2 class="section-title fade-up">The Developer<br>Behind the Work</h2>
+  <div class="about-grid">
+    <div class="about-bio fade-up">
+      <p>
+        Hey, I'm <strong>Omaji John</strong> — a software developer with <strong>4+ years</strong> of
+        experience turning ideas into fast, functional, and visually compelling digital products.
+      </p>
+      <p>
+        I specialize in <strong>frontend engineering</strong> but I'm comfortable across the full stack.
+        I've built everything from corporate websites and NGO platforms to
+        <strong>Web3 DeFi protocols</strong> on the Cardano blockchain.
+      </p>
+      <div class="grad-text">
+        "I believe in creating<br>solutions that matter."
+      </div>
+      <p>
+        When I'm not writing code, I'm learning about new technologies, contributing to open source,
+        or mentoring other developers in the community.
+      </p>
+      <div class="about-location">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Abuja, Nigeria — Open to remote work worldwide
+      </div>
+    </div>
+    <div class="fade-up" style="transition-delay:0.1s">
+      <p class="skills-label">Technologies</p>
+      <div class="skills-grid">
+        <span class="skill-tag">React</span>
+        <span class="skill-tag">Next.js</span>
+        <span class="skill-tag">TypeScript</span>
+        <span class="skill-tag">JavaScript</span>
+        <span class="skill-tag">Node.js</span>
+        <span class="skill-tag">HTML &amp; CSS</span>
+        <span class="skill-tag">Tailwind CSS</span>
+        <span class="skill-tag">Web3.js</span>
+        <span class="skill-tag">Cardano DApps</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Figma</span>
+        <span class="skill-tag">REST APIs</span>
+      </div>
+      <p class="skills-label">Services</p>
+      <div class="services-list">
+        <div class="service-item">
+          <span class="service-icon">🖥️</span>
+          <div class="service-text">
+            <strong>Web Development</strong>
+            <span>Custom websites and web apps built to perform</span>
+          </div>
+        </div>
+        <div class="service-item">
+          <span class="service-icon">⛓️</span>
+          <div class="service-text">
+            <strong>Web3 &amp; DApps</strong>
+            <span>Decentralized applications on Cardano and EVM chains</span>
+          </div>
+        </div>
+        <div class="service-item">
+          <span class="service-icon">🎨</span>
+          <div class="service-text">
+            <strong>UI/UX Design</strong>
+            <span>Clean, user-centered interface design in Figma</span>
+          </div>
+        </div>
+        <div class="service-item">
+          <span class="service-icon">🔧</span>
+          <div class="service-text">
+            <strong>Maintenance &amp; Support</strong>
+            <span>Ongoing updates, fixes, and performance improvements</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" aria-label="Contact">
+  <p class="section-label fade-up">Contact</p>
+  <h2 class="section-title fade-up">Let's Work Together</h2>
+  <div class="contact-grid">
+    <div class="fade-up">
+      <p style="color:var(--text-muted);margin-bottom:2rem;line-height:1.7">
+        Have a project in mind? I'd love to hear about it. Send me a message and
+        let's build something great together.
+      </p>
+      <div class="contact-info-line">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Abuja, Nigeria
+      </div>
+      <div class="contact-info-line">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <a href="mailto:johnomaji9@gmail.com">johnomaji9@gmail.com</a>
+      </div>
+      <div class="contact-info-line">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <a href="tel:+2349028139361">+234 902 813 9361</a>
+      </div>
+      <div class="contact-socials">
+        <a href="https://www.linkedin.com/in/omaji-john-b63885210/" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://twitter.com/WebJOHNNY_" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="X / Twitter">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="mailto:johnomaji9@gmail.com" class="social-btn" aria-label="Email">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="contact-form-card fade-up" style="transition-delay:0.1s">
+      <form id="contact-form" action="https://formspree.io/f/xbldyall" method="POST">
+        <div class="form-group">
+          <label for="contact-name">Name</label>
+          <input type="text" id="contact-name" name="name" placeholder="Your name" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="contact-email">Email</label>
+          <input type="email" id="contact-email" name="email" placeholder="your@email.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="contact-message">Message</label>
+          <textarea id="contact-message" name="message" placeholder="Tell me about your project…" required></textarea>
+        </div>
+        <button type="submit" class="btn-submit" id="contact-btn">Send Message</button>
+        <div class="form-success" id="contact-success">
+          ✓ Message sent! I'll get back to you soon.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HIRE ME ===== -->
+<section id="hire" aria-label="Hire me">
+  <div class="hire-inner">
+    <p class="section-label fade-up" style="justify-content:center">Hire Me</p>
+    <h2 class="section-title fade-up">What Can I Help<br>You Build?</h2>
+    <p class="hire-sub fade-up">Select the services you need and I'll reach out to discuss your project.</p>
+    <form id="hire-form" class="hire-form" action="https://formspree.io/f/xbldyall" method="POST">
+      <div class="hire-services fade-up">
+        <div class="service-check">
+          <input type="checkbox" id="svc-web" name="services[]" value="Web Development">
+          <label for="svc-web"><span class="svc-icon">🖥️</span>Web Development</label>
+        </div>
+        <div class="service-check">
+          <input type="checkbox" id="svc-web3" name="services[]" value="Web3 / DApp">
+          <label for="svc-web3"><span class="svc-icon">⛓️</span>Web3 / DApp</label>
+        </div>
+        <div class="service-check">
+          <input type="checkbox" id="svc-ui" name="services[]" value="UI/UX Design">
+          <label for="svc-ui"><span class="svc-icon">🎨</span>UI/UX Design</label>
+        </div>
+        <div class="service-check">
+          <input type="checkbox" id="svc-mob" name="services[]" value="Mobile App">
+          <label for="svc-mob"><span class="svc-icon">📱</span>Mobile App</label>
+        </div>
+        <div class="service-check">
+          <input type="checkbox" id="svc-maint" name="services[]" value="Maintenance & Support">
+          <label for="svc-maint"><span class="svc-icon">🔧</span>Maintenance</label>
+        </div>
+        <div class="service-check">
+          <input type="checkbox" id="svc-ai" name="services[]" value="AI Chatbot">
+          <label for="svc-ai"><span class="svc-icon">🤖</span>AI Chatbot</label>
+        </div>
+      </div>
+      <div class="hire-fields fade-up" style="transition-delay:0.1s">
+        <div class="form-group" style="margin:0">
+          <label for="hire-name">Name</label>
+          <input type="text" id="hire-name" name="name" placeholder="Your name" required autocomplete="name">
+        </div>
+        <div class="form-group" style="margin:0">
+          <label for="hire-email">Email</label>
+          <input type="email" id="hire-email" name="email" placeholder="your@email.com" required autocomplete="email">
+        </div>
+      </div>
+      <button type="submit" class="btn-submit fade-up" id="hire-btn" style="transition-delay:0.2s">
+        Send Request
+      </button>
+      <div class="form-success" id="hire-success">
+        ✓ Request Sent! I'll be in touch soon.
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer role="contentinfo">
+  <span>© 2026 Omaji John — Abuja, Nigeria</span>
+  <span>
+    <a href="mailto:johnomaji9@gmail.com">johnomaji9@gmail.com</a>
+  </span>
+</footer>
+
+<script>
+  /* ===== CUSTOM CURSOR ===== */
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+  (function animateCursor() {
+    dot.style.left  = mx + 'px';
+    dot.style.top   = my + 'px';
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(animateCursor);
+  })();
+
+  /* ===== INTERSECTION OBSERVER (fade-up) ===== */
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => observer.observe(el));
+
+  /* ===== ACTIVE NAV LINK ON SCROLL ===== */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const scrollSpy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`.nav-links a[href="#${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => scrollSpy.observe(s));
+
+  /* ===== SMOOTH SCROLL ===== */
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // close mobile menu if open
+        navLinksEl.classList.remove('mobile-open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  /* ===== HAMBURGER ===== */
+  const hamburger   = document.getElementById('hamburger');
+  const navLinksEl  = document.getElementById('nav-links');
+  hamburger.addEventListener('click', () => {
+    const open = hamburger.classList.toggle('open');
+    navLinksEl.classList.toggle('mobile-open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  /* ===== HIRE FORM ===== */
+  document.getElementById('hire-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('hire-btn');
+    const success = document.getElementById('hire-success');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      const res = await fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        btn.style.display = 'none';
+        success.style.display = 'block';
+        this.reset();
+      } else {
+        btn.textContent = 'Error — Try Again';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Error — Try Again';
+      btn.disabled = false;
+    }
+  });
+
+  /* ===== TECH GLOBE ===== */
+  (function () {
+    const container = document.getElementById('tech-globe');
+    if (!container || window.innerWidth <= 1100) return;
+
+    const techs = [
+      { name: 'React',       url: 'https://cdn.simpleicons.org/react/61DAFB' },
+      { name: 'Next.js',     url: 'https://cdn.simpleicons.org/nextdotjs/FFFFFF' },
+      { name: 'TypeScript',  url: 'https://cdn.simpleicons.org/typescript/3178C6' },
+      { name: 'JavaScript',  url: 'https://cdn.simpleicons.org/javascript/F7DF1E' },
+      { name: 'Node.js',     url: 'https://cdn.simpleicons.org/nodedotjs/339933' },
+      { name: 'Tailwind',    url: 'https://cdn.simpleicons.org/tailwindcss/06B6D4' },
+      { name: 'Git',         url: 'https://cdn.simpleicons.org/git/F05032' },
+      { name: 'Figma',       url: 'https://cdn.simpleicons.org/figma/F24E1E' },
+      { name: 'HTML5',       url: 'https://cdn.simpleicons.org/html5/E34F26' },
+      { name: 'CSS3',        url: 'https://cdn.simpleicons.org/css/1572B6' },
+      { name: 'MongoDB',     url: 'https://cdn.simpleicons.org/mongodb/47A248' },
+      { name: 'Ethereum',    url: 'https://cdn.simpleicons.org/ethereum/8A70FF' },
+    ];
+
+    const R = 168; // sphere radius (px)
+    const PHI = Math.PI * (3 - Math.sqrt(5)); // golden angle
+    const CX = 210, CY = 210; // center of the 420×420 container
+    const TILT = 0.42; // X-axis tilt in radians
+    const cosTilt = Math.cos(TILT), sinTilt = Math.sin(TILT);
+
+    // Build DOM nodes and distribute on a Fibonacci sphere
+    const nodes = techs.map((tech, i) => {
+      const y0 = 1 - ((i + 0.5) / techs.length) * 2;
+      const r  = Math.sqrt(Math.max(0, 1 - y0 * y0));
+      const th = PHI * i;
+      const x0 = Math.cos(th) * r;
+      const z0 = Math.sin(th) * r;
+
+      const el   = document.createElement('div');
+      el.className = 'globe-node';
+      const img  = document.createElement('img');
+      img.src    = tech.url;
+      img.alt    = tech.name;
+      img.width  = 28;
+      img.height = 28;
+      const lbl  = document.createElement('span');
+      lbl.textContent = tech.name;
+      el.appendChild(img);
+      el.appendChild(lbl);
+      container.appendChild(el);
+
+      return { el, x0, y0, z0 };
+    });
+
+    let rotY = 0;
+
+    function tick() {
+      rotY += 0.004;
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+
+      // Project each node and collect for depth-sorting
+      const projected = nodes.map(({ el, x0, y0, z0 }) => {
+        // Rotate around Y axis
+        const x1 =  x0 * cosY + z0 * sinY;
+        const z1 = -x0 * sinY + z0 * cosY;
+        // Tilt around X axis
+        const y2 =  y0 * cosTilt - z1 * sinTilt;
+        const z2 =  y0 * sinTilt + z1 * cosTilt;
+
+        const depth   = (z2 + 1.7) / 2.7;          // 0 → back, 1 → front
+        const scale   = 0.35 + 0.65 * depth;
+        const opacity = 0.1  + 0.9  * Math.pow(depth, 1.2);
+        const px = CX + x1 * R;
+        const py = CY + y2 * R;
+        return { el, px, py, scale, opacity, z: z2 };
+      });
+
+      // Paint back-to-front so front nodes render above back nodes
+      projected.sort((a, b) => a.z - b.z).forEach(({ el, px, py, scale, opacity }, idx) => {
+        el.style.cssText =
+          `left:${px.toFixed(1)}px;top:${py.toFixed(1)}px;` +
+          `transform:translate(-50%,-50%) scale(${scale.toFixed(3)});` +
+          `opacity:${opacity.toFixed(3)};z-index:${idx};`;
+      });
+
+      requestAnimationFrame(tick);
+    }
+
+    tick();
+  })();
+
+  /* ===== CONTACT FORM ===== */
+  document.getElementById('contact-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('contact-btn');
+    const success = document.getElementById('contact-success');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      const res = await fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        btn.style.display = 'none';
+        success.style.display = 'block';
+        this.reset();
+      } else {
+        btn.textContent = 'Error — Try Again';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Error — Try Again';
+      btn.disabled = false;
+    }
+  });
+</script>
 </body>
-
 </html>
